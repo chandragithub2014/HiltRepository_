@@ -6,11 +6,14 @@ import com.hilt.demo.model.Data
 import com.hilt.demo.model.EmpInfo
 import com.hilt.demo.model.PostModel
 import com.hilt.demo.repository.NetworkRepository
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
+import kotlin.coroutines.CoroutineContext
 
-class EmployeeViewModel @ViewModelInject constructor(private val networkRepository: NetworkRepository) :
+class EmployeeViewModel @ViewModelInject constructor(private val dispatcher: CoroutineDispatcher,private val networkRepository: NetworkRepository) :
     ViewModel(),LifecycleObserver {
 
     var loading : MutableLiveData<Boolean> = MutableLiveData()
@@ -20,7 +23,7 @@ class EmployeeViewModel @ViewModelInject constructor(private val networkReposito
 
       fun fetchEmpInfo() {
 
-          viewModelScope.launch(Dispatchers.IO) {
+          viewModelScope.launch(dispatcher) {
               try{
                   val response = networkRepository.fetchEmps()
                   if(response.isSuccessful){
