@@ -4,9 +4,35 @@ plugins {
     id 'kotlin-android-extensions'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-
+    id 'org.sonarqube'
+    id("io.gitlab.arturbosch.detekt").version("1.11.0-RC1")
 }
-
+detekt {
+    toolVersion = "1.11.0-RC1"
+    input = files("src/main/java")
+    config = files("$rootDir/config/detekt/detekt.yml")
+    //filters = ".*/resources/.*,.*/build/.*"
+    //baseline = file("my-detekt-baseline.xml") // Just if you want to create a baseline file.
+    reports {
+        xml {
+            enabled = true                                // Enable/Disable XML report (default: true)
+            destination = file("$buildDir/reports/detekt.xml") // Path where XML report will be stored (default: `build/reports/detekt/detekt.xml`)
+        }
+        html {
+            enabled = true                                // Enable/Disable HTML report (default: true)
+            destination = file("$buildDir/reports/detekt.html") // Path where HTML report will be stored (default: `build/reports/detekt/detekt.html`)
+        }
+        txt {
+            enabled = true                                // Enable/Disable TXT report (default: true)
+            destination = file("$buildDir/reports/detekt.txt") // Path where TXT report will be stored (default: `build/reports/detekt/detekt.txt`)
+        }
+        custom {
+            reportId = "CustomJsonReport"                   // The simple class name of your custom report.
+            destination = file("$buildDir/reports/detekt.json") // Path where report will be stored
+        }
+    }
+}
+//apply from: "$rootDir/detekt.gradle"
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.0"
@@ -33,6 +59,27 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+}
+sonarqube {
+    properties {
+        property "sonar.projectName", "HiltApp"
+        property "sonar.projectKey", "HiltApp"
+        property "sonar.host.url", "http://localhost:9000"
+        //property "sonar.language", "kotlin"
+        property "sonar.sources", "src/main/java"
+        property "sonar.java.sources", "src/main/java"
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.login", "admin"
+        property "sonar.password", "admin"
+        property "sonar.coverage.exclusions", "src/androidTest/java"
+        property "detekt.sonar.kotlin.config.path", "$rootDir/config/detekt/detekt.yml"
+        property "sonar.issuesReport.html.enable", "true"
+        property "sonar.issuesReport.console.enable", "true"
+
+        //property "detekt.sonar.kotlin.filters", ".*/test/.*,.*/resources/.*,.*/build/.*,.*/target/.*"
+         property "sonar.kotlin.detekt.reportPaths", "$buildDir/reports/detekt.xml"
+         property "sonar.kotlin.detekt.reportPaths", "$buildDir/reports/detekt.xml"
     }
 }
 
@@ -86,5 +133,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:1.11.0-RC1"
 
 }

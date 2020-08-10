@@ -25,7 +25,6 @@ class EmployeeSwipeFragment : Fragment(){
     private val mainViewModel : EmployeeViewModel by viewModels()
     private var userListView : View? = null
     var mContainerId:Int = -1
-    //private var postListAdapter : PostAdapter? = null
     private var postSwipeAdapter : PostSwipeAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +60,6 @@ class EmployeeSwipeFragment : Fragment(){
         mainViewModel.fetchUsersLiveData().observe(viewLifecycleOwner, Observer {
             it?.let {
                 println("Response From Network :::: $it")
-              //  postListAdapter?.refreshAdapter(it)
                 postSwipeAdapter?.submitList(it)
             }
         })

@@ -35,7 +35,9 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun anotherEmpty(){
+      try{
 
+      }catch (e:Exception){}
     }
 
 

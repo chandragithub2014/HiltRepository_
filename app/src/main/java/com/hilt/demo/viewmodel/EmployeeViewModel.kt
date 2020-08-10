@@ -2,8 +2,6 @@ package com.hilt.demo.viewmodel
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import com.hilt.demo.model.Data
-import com.hilt.demo.model.EmpInfo
 import com.hilt.demo.model.PostModel
 import com.hilt.demo.repository.NetworkRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -38,6 +36,8 @@ class EmployeeViewModel @ViewModelInject constructor(private val dispatcher: Cor
                   loading.postValue(false)
                   errorOnAPI.postValue("Something went wrong::${e.localizedMessage}")
 
+              }finally {
+
               }
           }
       }
@@ -46,6 +46,10 @@ class EmployeeViewModel @ViewModelInject constructor(private val dispatcher: Cor
     fun fetchLoadStatus(): LiveData<Boolean> = loading
     fun fetchUsersLiveData(): LiveData<List<PostModel>> = empListMutableLiveData
 
+    fun emptyFunc(){
+       while(true){
 
+       }
+    }
 
 }
